@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Struct &amp; Union Access Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eaf1fa;--panel:#f9fbff;--ink:#12306a;--mut:#4d6694;--line:#9db4d8;--grid:#d3e0f2;--acc:#12306a;--acc2:#b45309;--ok:#15803d;--bad:#b91c1c;--code:#e1ebf9;--kw:#6d28d9;--num:#b45309;--chr:#0f766e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e2a55;--panel:#133668;--ink:#eaf3ff;--mut:#a9c0e6;--line:#4a72ad;--grid:#16366b;--acc:#ffd75e;--acc2:#ffd75e;--ok:#8be8b2;--bad:#ff9d9d;--code:#0b2247;--kw:#c9b2ff;--num:#ffd75e;--chr:#7ff0dc}}
+:root[data-theme=dark]{--bg:#0e2a55;--panel:#133668;--ink:#eaf3ff;--mut:#a9c0e6;--line:#4a72ad;--grid:#16366b;--acc:#ffd75e;--acc2:#ffd75e;--ok:#8be8b2;--bad:#ff9d9d;--code:#0b2247;--kw:#c9b2ff;--num:#ffd75e;--chr:#7ff0dc}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.5 "Bricolage Grotesque",system-ui,sans-serif;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:26px 26px}
+main{max-width:820px;margin:0 auto;padding:18px 14px 40px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+h1{font-weight:800;font-size:clamp(1.4rem,5vw,2rem);margin:0;letter-spacing:-.02em}
+h1 small{display:block;font-size:.5em;font-weight:500;color:var(--mut);letter-spacing:0}
+code,pre,input,.mono{font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+.b{font:inherit;font-weight:700;padding:.55em 1em;border:1.5px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;cursor:pointer}
+.b:hover{border-color:var(--ink)}.b:focus-visible,input:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+.b.p{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.stat{border:1.5px solid var(--line);background:var(--panel);border-radius:6px;padding:4px 12px}
+.stat b{font-size:1.25rem;display:block;line-height:1.1}.stat span{font-size:.8rem;color:var(--mut)}
+nav,.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+nav .b{border-radius:6px 6px 0 0}nav .on,.chips .on{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.chips .b{font-weight:500;padding:.3em .8em;font-size:.9rem}.chips .on{font-weight:700}
+.card{background:var(--panel);border:2px solid var(--ink);border-radius:4px;padding:16px;box-shadow:6px 6px 0 var(--line)}
+.ask{font-size:1.2rem;font-weight:700;margin:0 0 12px}
+.tag{display:inline-block;font-size:.85rem;color:var(--bg);background:var(--acc2);padding:0 8px;border-radius:3px;margin-bottom:8px;font-weight:700}
+:root[data-theme=dark] .tag{color:#0e2a55}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .tag{color:#0e2a55}}
+pre{background:var(--code);border:1.5px dashed var(--line);border-radius:4px;padding:12px;margin:0 0 12px;overflow-x:auto;font-size:.9rem;line-height:1.55}
+.k{color:var(--kw);font-style:normal;font-weight:700}.c{color:var(--chr);font-style:normal}.n{color:var(--num);font-style:normal}
+.in{display:flex;align-items:center;gap:8px;border:2px solid var(--ink);border-radius:4px;background:var(--code);padding:0 10px}
+.in input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font-size:1rem;padding:12px 0;outline:none}
+.in:focus-within{border-color:var(--acc2);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc2) 35%,transparent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.fb{padding:10px 12px;border-left:5px solid var(--line);background:var(--code);border-radius:3px;margin-top:6px}
+.fb.ok{border-color:var(--ok)}.fb.no{border-color:var(--bad)}.fb.hi{border-color:var(--acc2)}
+.fb p{margin:.3em 0}
+.mem{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:10px}
+.cell{border:1.5px solid var(--line);border-radius:4px;padding:4px 8px;font-size:.85rem}
+.cell.ch{border-color:var(--acc2);background:color-mix(in srgb,var(--acc2) 18%,transparent)}
+.cell span{display:block;color:var(--mut);font-size:.75rem}
+.cell em{font-style:normal;color:var(--mut)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{border:1.5px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--code)}
+.tbl{overflow-x:auto}
+ul.t{padding-left:1.1em;margin:0}ul.t li{margin:.5em 0}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:no-preference){.pop{animation:pop .25s}@keyframes pop{from{transform:scale(.98);opacity:.4}}}
+</style></head><body><main>
+<header><h1>Struct &amp; Union Access Trainer<small>Type the C statement that does the job.</small></h1>
+<button class="b" id="th" aria-label="Toggle light or dark theme">Light / dark</button></header>
+<div class="stats">
+<div class="stat"><b id="sc">0</b><span>score</span></div>
+<div class="stat"><b id="st">0</b><span>streak</span></div>
+<div class="stat"><b id="so">0</b><span>solved</span></div>
+<div class="stat"><b id="ac">–</b><span>accuracy</span></div>
+<div class="stat"><b id="be">0</b><span>best score</span></div></div>
+<nav><button class="b on" data-t="play">Play</button><button class="b" data-t="cheat">Cheat sheet</button><button class="b" data-t="tips">Tips</button></nav>
+
+<section id="play">
+<div class="chips" id="chips"></div>
+<div class="card" id="card">
+<span class="tag" id="kind"></span>
+<p class="ask" id="ask"></p>
+<pre id="code"></pre>
+<div class="in"><span class="mono">&gt;</span><input id="in" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Your C statement" placeholder="Type your C code, then press Enter"></div>
+<div class="btns"><button class="b p" id="chk">Check</button><button class="b" id="hint">Hint</button><button class="b" id="sol">Show solution</button><button class="b" id="nxt">Skip</button></div>
+<div id="fb" aria-live="polite"></div><div class="mem" id="mem"></div>
+</div></section>
+
+<section id="cheat" hidden><div class="card"><div class="tbl"><table>
+<tr><th>Syntax</th><th>What it does</th><th>Example</th></tr>
+<tr><td><code>s.m</code></td><td>Member of a struct <em>variable</em></td><td><code>s.voltage = 4.5f;</code></td></tr>
+<tr><td><code>p-&gt;m</code></td><td>Member through a <em>pointer</em></td><td><code>ptr-&gt;id = 12;</code></td></tr>
+<tr><td><code>(*p).m</code></td><td>Same as <code>p-&gt;m</code>, spelled out</td><td><code>(*ptr).status = 'F';</code></td></tr>
+<tr><td><code>&amp;s</code></td><td>Address of the whole struct</td><td><code>struct Sensor *ptr = &amp;s;</code></td></tr>
+<tr><td><code>&amp;s.m</code>, <code>&amp;p-&gt;m</code></td><td>Address of one member</td><td><code>float *pv = &amp;ptr-&gt;voltage;</code></td></tr>
+<tr><td><code>s.in.x</code>, <code>p-&gt;in.x</code></td><td>Nested struct: chain the hops</td><td><code>ptr-&gt;pos.x = 7;</code></td></tr>
+<tr><td><code>s.a[i]</code>, <code>p-&gt;a[i]</code></td><td>Array member: index after the member</td><td><code>s.readings[1] = 20;</code></td></tr>
+<tr><td><code>u.i</code> / <code>u.f</code></td><td>Union: members share the same bytes; the last write wins</td><td><code>u.f = 2.5f;</code></td></tr>
+<tr><td><code>+=</code></td><td>Update in place</td><td><code>s.count += 5;</code></td></tr>
+<tr><td>Literals</td><td>int, float, char, string</td><td><code>12</code> <code>4.5f</code> <code>'F'</code> <code>"hi"</code></td></tr>
+<tr><td>Declare</td><td><code>struct T *name = &amp;var;</code></td><td><code>struct Motor *ptr = &amp;m;</code></td></tr>
+</table></div></div></section>
+
+<section id="tips" hidden><div class="card"><ul class="t">
+<li><b>Look at the left-hand name first.</b> A struct variable takes <code>.</code>. A pointer takes <code>-&gt;</code>. Most mistakes are this one swap.</li>
+<li><code>ptr-&gt;x</code> is shorthand for <code>(*ptr).x</code>. The parentheses matter: <code>*ptr.x</code> means <code>*(ptr.x)</code>, which fails because <code>ptr</code> has no members.</li>
+<li><b>Nested structs:</b> only the first hop depends on what you hold. <code>ptr-&gt;pos.x</code> uses <code>-&gt;</code> once, then <code>.</code>, because <code>pos</code> is a struct, not a pointer.</li>
+<li><b>Literals:</b> <code>'A'</code> is one char; <code>"A"</code> is a string. <code>4.5f</code> is a float; plain <code>4.5</code> is a double. This trainer accepts both for floats.</li>
+<li><b>Statements end with <code>;</code></b>, expressions such as <code>ptr-&gt;voltage</code> or <code>&amp;s.id</code> do not need one here.</li>
+<li><b>Unions:</b> the size is the largest member, and only the member you wrote last holds a meaningful value. Real code often pairs a union with a tag field that records which member is active.</li>
+<li><b>Precedence:</b> <code>.</code>, <code>-&gt;</code> and <code>[ ]</code> bind tighter than <code>&amp;</code> and <code>*</code>, so <code>&amp;ptr-&gt;id</code> means <code>&amp;(ptr-&gt;id)</code>.</li>
+<li>You can’t assign whole arrays or strings with <code>=</code>. Use <code>s.name[0] = 'Z';</code> or <code>strcpy</code>.</li>
+<li><b>Scoring:</b> 100 points per challenge, minus 25 per hint and 10 per wrong try, plus a streak bonus. Showing the solution scores nothing.</li>
+</ul></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s),R=a=>a[Math.random()*a.length|0],N=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const hl=s=>esc(s).replace(/\b(struct|union|int|float|char)\b/g,'<i class="k">$1</i>').replace(/('.')/g,'<i class="c">$1</i>').replace(/\b(\d+\.?\d*f?)\b/g,'<i class="n">$1</i>');
+const norm=s=>s.replace(/\s+/g,' ').trim().replace(/ ?([^\w ]) ?/g,'$1');
+const V={int:()=>''+N(1,99),float:()=>(N(5,99)/10).toFixed(1),char:()=>String.fromCharCode(N(65,90))};
+const D=(t,x)=>t=='int'?x:t=='float'?x+'f':`'${x}'`;
+const VA=(t,x)=>t=='float'?[x+'f',x]:[D(t,x)];
+const BASIC=[['Sensor','s',['id','int'],['voltage','float'],['status','char']],['Motor','m',['rpm','int'],['torque','float'],['mode','char']],['Student','st',['id','int'],['gpa','float'],['grade','char']],['Packet','pk',['seq','int'],['temp','float'],['flag','char']],['Drone','d',['altitude','int'],['battery','float'],['state','char']]];
+const NEST=[['Robot','r','Point','pos',[['x','int'],['y','int']],[['id','int'],['state','char']]],['Player','pl','Stats','stats',[['hp','int'],['mana','float']],[['level','int'],['rank','char']]],['Rect','rc','Point','origin',[['x','int'],['y','int']],[['w','int'],['h','int']]]];
+const ARR=[['Logger','lg','readings','int',3,['count','int'],['level','char']],['Student','st','scores','int',3,['id','int'],['grade','char']],['Tag','tg','label','char',4,['id','int'],['kind','char']]];
+const UN=[['Value','u',['i','int'],['f','float'],['c','char']],['Word','w',['whole','int'],['ratio','float'],['byte','char']]];
+const cd=p=>`<code>${p}</code>`;
+const lf=(p,t,d)=>({p,t,x:V[t](),d});
+const fld=([p,t])=>`    ${t} ${p};`;
+const ini=L=>L.map(l=>D(l.t,l.x)).join(', ');
+function fB(){const[n,v,...f]=R(BASIC),L=f.map(([p,t])=>lf(p,t,cd(p)));return{k:'struct',n,v,L,defs:`struct ${n} {\n${f.map(fld).join('\n')}\n};`,init:ini(L)}}
+function fN(){const[n,v,i,fl,inn,ex]=R(NEST),a=lf(ex[0][0],ex[0][1],cd(ex[0][0])),b=lf(ex[1][0],ex[1][1],cd(ex[1][0])),m=inn.map(([p,t])=>lf(fl+'.'+p,t,`${cd(p)} inside the nested ${cd(fl)} struct`));
+return{k:'struct',n,v,L:[a,...m,b],defs:`struct ${i} {\n${inn.map(fld).join('\n')}\n};\n\nstruct ${n} {\n${fld(ex[0])}\n    struct ${i} ${fl};\n${fld(ex[1])}\n};`,init:`${D(a.t,a.x)}, {${ini(m)}}, ${D(b.t,b.x)}`}}
+function fA(){const[n,v,p,t,m,e0,e1]=R(ARR),a=lf(e0[0],e0[1],cd(e0[0])),b=lf(e1[0],e1[1],cd(e1[0])),r=[...Array(m)].map((_,i)=>lf(`${p}[${i}]`,t,`element ${i} of the ${cd(p)} array`));
+return{k:'struct',n,v,L:[a,...r,b],defs:`struct ${n} {\n${fld(e0)}\n    ${t} ${p}[${m}];\n${fld(e1)}\n};`,init:`${D(a.t,a.x)}, {${ini(r)}}, ${D(b.t,b.x)}`}}
+function fU(){const[n,v,...f]=R(UN),L=f.map(([p,t],i)=>({p,t,x:i?null:V[t](),d:`the ${cd(p)} member`,g:1}));return{k:'union',n,v,L,defs:`union ${n} {\n${f.map(fld).join('\n')}\n};`,init:D(L[0].t,L[0].x)}}
+const MODES={mix:[fB,fN,fA,fU],basic:[fB],ptr:[fB,fN],nest:[fN,fA],union:[fU]},PP={mix:.5,basic:0,ptr:1,nest:.4,union:.5};
+const LABEL={mix:'Mixed',basic:'Struct basics',ptr:'Pointers',nest:'Nested and arrays',union:'Unions'};
+let mode='mix',c,score=0,streak=0,solved=0,tries=0,best=0;
+try{best=+localStorage.getItem('sat_best')||0}catch(e){}
+
+function make(){
+ const S=R(MODES[mode])(),pp=PP[mode];let ptr=Math.random()<pp,kind=R(['set','set','add','copy','addr',...(pp?['get','decl']:[])]);
+ const okf={add:l=>l.t=='int'&&l.x!=null,copy:l=>l.x!=null,get:l=>l.x!=null};
+ let C=S.L.filter(okf[kind]||(()=>1));if(!C.length){kind='set';C=S.L}
+ const l=R(C);if(kind=='get')ptr=true;if(kind=='decl')ptr=false;
+ const A=p=>ptr?[`ptr->${p}`,`(*ptr).${p}`]:[`${S.v}.${p}`],w=ptr?'ptr->':S.v+'.';
+ c={S,ptr,kind,l,stmt:true,h:0,w:0,done:0,ans:[],after:()=>{}};
+ const who=ptr?`the pointer ${cd('ptr')}`:`the variable ${cd(S.v)}`;
+ let up=ptr?'<code>ptr-&gt;member</code> is shorthand for <code>(*ptr).member</code>: dereference, then select.':'The dot operator selects a member of a struct or union variable.';
+ if(kind=='set'){let nv;do nv=V[l.t]();while(nv==l.x);const pv=l.t=='char'?`'${nv}'`:nv;
+  c.tag='Assign a value';c.ask=`${R(['Set','Change','Update'])} ${l.d} to <b>${pv}</b>. Use ${who}.`;
+  c.ans=A(l.p).flatMap(a=>VA(l.t,nv).map(v=>`${a} = ${v}`));c.sk=`${w}___ = ___;`;
+  c.ex=up+(l.t=='float'?' The <code>f</code> suffix makes the literal a float.':'')+(l.t=='char'?' Char constants use single quotes.':'')+(S.k=='union'?' Writing one union member overwrites the shared bytes, so the other members now hold reinterpreted garbage.':'');
+  c.after=L=>{const q=L.find(z=>z.p==l.p);q.pv=q.x;q.x=nv;q.ch=1;if(S.k=='union')L.forEach(z=>{if(z!=q){z.x=null;z.ch=0}})}}
+ else if(kind=='add'){const d=N(2,9);c.tag='Update in place';c.ask=`Increase ${l.d} by <b>${d}</b>. Use ${who}.`;
+  c.ans=A(l.p).flatMap(a=>[`${a} += ${d}`,`${a} = ${a} + ${d}`,`${a} = ${d} + ${a}`]);c.sk=`${w}___ += ___;`;c.ex=up+' <code>+=</code> reads and writes the member in one step.';
+  c.after=L=>{const q=L.find(z=>z.p==l.p);q.pv=q.x;q.x=+q.x+d;q.ch=1}}
+ else if(kind=='copy'){c.tag='Read a value';c.ask=`Copy the value of ${l.d} into a new ${cd(l.t)} variable named ${cd('copy')}. Use ${who}.`;
+  c.ans=A(l.p).map(a=>`${l.t} copy = ${a}`);c.sk=`${l.t} copy = ___;`;c.ex=up+' The new variable gets its own copy; changing it later does not touch the struct.'}
+ else if(kind=='addr'){c.tag='Address of a member';c.stmt=false;c.ask=`Write an expression for the <em>address</em> of ${l.d}. Use ${who}.`;
+  c.ans=A(l.p).flatMap(a=>[`&${a}`,`&(${a})`]);c.sk='&___';c.ex='<code>&amp;</code> goes in front of the whole member expression. Since <code>.</code> and <code>-&gt;</code> bind tighter, <code>&amp;ptr-&gt;x</code> means <code>&amp;(ptr-&gt;x)</code>.'}
+ else if(kind=='get'){c.tag='Pointer access';c.stmt=false;c.ask=`Write the expression that reads ${l.d} through the pointer ${cd('ptr')}.`;
+  c.ans=A(l.p);c.sk='ptr->___';c.ex=up}
+ else{c.tag='Pointer declaration';c.ask=`Declare a pointer named ${cd('ptr')} to a ${cd(S.k+' '+S.n)} and make it point at ${cd(S.v)}.`;
+  c.ans=[`${S.k} ${S.n} *ptr = &${S.v}`];c.sk=`${S.k} ${S.n} *___ = &___;`;c.ex='The <code>*</code> in a declaration says “pointer to”, and <code>&amp;</code> takes the address of the variable.'}
+ let h1=kind=='decl'?'A declaration reads <code>type *name = &amp;variable;</code>.':ptr?`${cd('ptr')} holds an address, so reach members with <code>-&gt;</code> (or <code>(*ptr).</code>).`:`${cd(S.v)} is a ${S.k} variable, so use the dot operator.`;
+ if(kind!='decl'&&l.p.includes('.'))h1+=' Chain the hops: only the first one depends on pointer or variable.';
+ if(kind!='decl'&&l.p.includes('['))h1+=' Put the index after the member name.';
+ c.sol=c.ans[0]+(c.stmt?';':'');
+ c.hints=[h1,`Shape: <code>${c.sk}</code>`,`Starts with: <code>${esc(c.sol.slice(0,Math.ceil(c.sol.length*.6)))}…</code>`];
+ c.L=S.L.map(z=>({...z}));
+ $('#kind').textContent=c.tag;$('#ask').innerHTML=c.ask;
+ $('#code').innerHTML=hl(`${S.defs}\n\n${S.k} ${S.n} ${S.v} = {${S.init}};`+(ptr?`\n${S.k} ${S.n} *ptr = &${S.v};`:''));
+ $('#fb').innerHTML='';$('#mem').innerHTML='';$('#in').value='';$('#in').disabled=false;
+ $('#nxt').textContent='Skip';$('#chk').disabled=$('#hint').disabled=$('#sol').disabled=false;$('#card').classList.add('pop');$('#in').focus();
+ setTimeout(()=>$('#card').classList.remove('pop'),300);
+}
+const fb=(t,h)=>$('#fb').innerHTML=`<div class="fb ${t}">${h}</div>`;
+function mem(){const L=c.L.map(z=>({...z}));c.after(L);$('#mem').innerHTML=L.map(z=>`<div class="cell ${z.ch?'ch':''}"><span>${z.t} ${z.p}</span>${z.x==null?'<em>shared bytes</em>':(z.pv!=null?D(z.t,z.pv)+' → ':'')+'<b>'+D(z.t,z.x)+'</b>'}</div>`).join('')}
+function end(){c.done=1;$('#in').disabled=true;$('#chk').disabled=$('#hint').disabled=$('#sol').disabled=true;$('#nxt').textContent='Next challenge';$('#nxt').focus();mem();stats()}
+function stats(){$('#sc').textContent=score;$('#st').textContent=streak;$('#so').textContent=solved;$('#ac').textContent=tries?Math.round(solved/tries*100)+'%':'–';if(score>best){best=score;try{localStorage.setItem('sat_best',best)}catch(e){}}$('#be').textContent=best}
+function check(){
+ const raw=$('#in').value;if(!raw.trim()||c.done)return;
+ const n=norm(raw),semi=n.endsWith(';'),core=n.replace(/;$/,''),hit=c.ans.some(a=>norm(a)==core);tries++;
+ if(hit&&(!c.stmt||semi)){const pts=Math.max(20,100-25*c.h-10*c.w)+Math.min(streak*10,50);score+=pts;streak++;solved++;
+  fb('ok',`<p><b>Correct! +${pts} points</b></p><p>${c.ex}</p>`+(c.l.t=='float'&&c.kind!='decl'&&!/\d\.\d+f/.test(raw)?'<p>Tip: <code>4.5</code> is a double; add <code>f</code> to make a float literal.</p>':'')+'<p>Memory after your statement:</p>');return end()}
+ c.w++;streak=0;stats();const S=c.S,L=c.l;let m;
+ if(hit)m='Right idea, but a statement ends with a semicolon <code>;</code>.';
+ else if(c.ptr&&/\bptr\./.test(n))m=`${cd('ptr')} is a pointer, so <code>ptr.member</code> won’t compile. Use <code>-&gt;</code> or <code>(*ptr).</code>.`;
+ else if(!c.ptr&&n.includes('->')&&c.kind!='decl')m=`${cd(S.v)} is not a pointer. Use <code>.</code> for variables; <code>-&gt;</code> is for pointers.`;
+ else if(/"/.test(n)&&L.t=='char')m='Single characters use single quotes, like <code>\'A\'</code>. Double quotes make strings.';
+ else if(c.kind!='decl'&&!n.includes(L.p))m='Check which member the instruction asks for, and spell it exactly as declared.';
+ else if(c.kind=='set'&&!VA(L.t,'').some(()=>1)||(c.kind=='set'&&!c.ans.some(a=>n.includes(norm(a).split('=').pop()))))m='Check the value you’re assigning.';
+ else m='Not quite. Check the operators, spelling and the statement shape. A hint can help.';
+ fb('no',m)}
+function hint(){if(c.done||c.h>=3)return;c.h++;fb('hi',c.hints.slice(0,c.h).map((h,i)=>`<p><b>Hint ${i+1}:</b> ${h}</p>`).join(''))}
+function sol(){if(c.done)return;streak=0;tries++;fb('hi',`<p><b>Solution:</b> <code>${esc(c.sol)}</code></p><p>${c.ex}</p><p>Memory after:</p>`);end()}
+$('#chk').onclick=check;$('#hint').onclick=hint;$('#sol').onclick=sol;
+$('#nxt').onclick=()=>{if(!c.done){streak=0;stats()}make()};
+$('#in').onkeydown=e=>{if(e.key=='Enter')check()};
+document.onkeydown=e=>{if(e.key=='Enter'&&c&&c.done&&$('#play').hidden==false)make()};
+$('#chips').innerHTML=Object.keys(LABEL).map(k=>`<button class="b ${k==mode?'on':''}" data-m="${k}">${LABEL[k]}</button>`).join('');
+$('#chips').onclick=e=>{const k=e.target.dataset.m;if(!k)return;mode=k;[...$('#chips').children].forEach(b=>b.classList.toggle('on',b.dataset.m==k));make()};
+document.querySelector('nav').onclick=e=>{const t=e.target.dataset.t;if(!t)return;['play','cheat','tips'].forEach(x=>{$('#'+x).hidden=x!=t});[...e.currentTarget.children].forEach(b=>b.classList.toggle('on',b.dataset.t==t))};
+$('#th').onclick=()=>{const r=document.documentElement,dk=r.dataset.theme?r.dataset.theme=='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dk?'light':'dark'};
+stats();make();
+</script></body></html>
